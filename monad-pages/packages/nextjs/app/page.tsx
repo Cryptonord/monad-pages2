@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { Address, Balance } from "~~/components/scaffold-eth";
-import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
-import { formatEther } from "viem";
+import { PlusIcon, GlobeAltIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
+import { Address } from "~~/components/scaffold-eth";
+import { PageFeed } from "~~/components/monad-pages/PageFeed";
 
 // Helper function to split a string into chunks of a specific size.
 const chunkString = (str: string, size: number): string[] => {

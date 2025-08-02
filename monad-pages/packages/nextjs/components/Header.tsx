@@ -21,6 +21,21 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
+    label: "Create",
+    href: "/create",
+    icon: <PlusIcon className="h-4 w-4" />,
+  },
+  {
+    label: "Browse",
+    href: "/pages",
+    icon: <GlobeAltIcon className="h-4 w-4" />,
+  },
+  {
+    label: "My Pages",
+    href: "/my-pages",
+    icon: <DocumentTextIcon className="h-4 w-4" />,
+  },
+  {
     label: "Debug Contracts",
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
