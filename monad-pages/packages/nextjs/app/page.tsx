@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import type { NextPage } from "next";
+import { message, notification } from "antd";
 import { useAccount } from "wagmi";
 import { PlusIcon, GlobeAltIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { PageFeed } from "~~/components/monad-pages/PageFeed";
+import { useState } from "react";
+import { useScaffoldWriteContract, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { formatEther } from "ethers";
 
 // Helper function to split a string into chunks of a specific size.
 const chunkString = (str: string, size: number): string[] => {
@@ -27,15 +31,15 @@ const Deployer: React.FC = () => {
 
   const handleDeploy = async () => {
     if (!file || !title) {
-      notification.error("Please provide a title and select a file.");
+      notification.error({ message: "Please provide a title and select a file." });
       return;
     }
     if (!connectedAddress) {
-      notification.error("Please connect your wallet to deploy.");
+      notification.error({ message: "Please connect your wallet to deploy." });
       return;
     }
 
-    const notificationId = notification.loading("Reading and preparing your file...");
+    const notificationId = message.loading("Reading and preparing your file...");
 
     const reader = new FileReader();
     reader.readAsText(file, "UTF-8");
@@ -46,23 +50,23 @@ const Deployer: React.FC = () => {
         const CHUNK_SIZE = 24 * 1024; // 24KB chunks
         const contentChunks = chunkString(content, CHUNK_SIZE);
 
-        notification.loading("Please confirm in your wallet...", { id: notificationId });
+        message.loading("Please confirm in your wallet...");
 
         await deployPage({
           functionName: "deployPage",
           args: [title, contentChunks, file.type],
         });
 
-        notification.success("Page deployed successfully!", { id: notificationId });
+        notification.success({ message: "Page deployed successfully!" });
         setTitle("");
         setFile(null);
       } catch (error: any) {
-        notification.error(`Error: ${error.shortMessage || error.message}`, { id: notificationId });
+        notification.error({ message: `Error: ${error.shortMessage || error.message}` });
         console.error("Error deploying page:", error);
       }
     };
     reader.onerror = () => {
-      notification.error("Error reading the selected file.", { id: notificationId });
+      notification.error({ message: "Error reading the selected file." });
     };
   };
 
@@ -119,9 +123,9 @@ const PageCard: React.FC<{ page: any }> = ({ page }) => {
         args: [page.id],
         value: BigInt(parseFloat(tipAmount) * 1e18),
       });
-      notification.success("Tip sent successfully!");
+      notification.success({ message: "Tip sent successfully!" });
     } catch (error: any) {
-      notification.error(`Error: ${error.shortMessage || error.message}`);
+      notification.error({ message: `Error: ${error.shortMessage || error.message}` });
       console.error("Error sending tip:", error);
     }
   };
